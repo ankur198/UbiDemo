@@ -36,35 +36,6 @@ namespace HomeManager
 
         public int TransitionSpeed = 50;
 
-        internal async void MessageRecieved(string e)
-        {
-            var d = e.Split(',');
-            var nickname = d[0];
-
-            if (Lights.Count(x => x.Nickname == nickname) == 1)
-            {
-                Light light = Lights.Find(x => x.Nickname == nickname);
-                var state = d[1] == "1" ? true : false;
-                var brightness = int.Parse(d[2]);
-
-                if (brightness != light.Brightness)
-                {
-                    light.Brightness = brightness;
-                    return;
-                }
-                else if (state != light.State)
-                {
-                    if (state == true)
-                    {
-                        await light.TurnOnAsync();
-                    }
-                    else
-                    {
-                        await light.TurnOffAsync();
-                    }
-                }
-            }
-        }
     }
 
     public class Light

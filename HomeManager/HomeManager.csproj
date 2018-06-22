@@ -95,7 +95,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AzureIoTHub.cs" />
     <Compile Include="GpioManager.cs" />
     <Compile Include="LightManager.cs" />
     <Compile Include="MainPage.xaml.cs">
@@ -107,7 +106,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="Connected Services\Home198\ConnectedService.json" />
     <None Include="HomeManager_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

@@ -30,13 +30,6 @@ namespace HomeManager
             this.InitializeComponent();
 
             HallLights.AddLight("Tubelight", 13);
-            AzureIoTHub.OnMessageRecieved += AzureIoTHub_OnMessageRecieved;
-            AzureIoTHub.RecieveCloudToDeviceMessageIndefinately();
-        }
-
-        private void AzureIoTHub_OnMessageRecieved(object sender, string e)
-        {
-            HallLights.MessageRecieved(e);
         }
 
         private async void btnOn_Click(object sender, RoutedEventArgs e)
