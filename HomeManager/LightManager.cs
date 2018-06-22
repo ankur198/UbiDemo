@@ -34,7 +34,7 @@ namespace HomeManager
             private set { /* set the specified index to value here */ }
         }
 
-        public int TransitionSpeed = 50;
+        public int TransitionSpeed = 5;
 
         internal async void MessageRecieved(string e)
         {
