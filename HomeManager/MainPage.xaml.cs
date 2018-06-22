@@ -24,17 +24,25 @@ namespace HomeManager
     public sealed partial class MainPage : Page
     {
         LightManager HallLights = new LightManager();
+
         public MainPage()
         {
             this.InitializeComponent();
 
             HallLights.AddLight("Tubelight", 13);
+            AzureIoTHub.OnMessageRecieved += AzureIoTHub_OnMessageRecieved;
+            AzureIoTHub.RecieveCloudToDeviceMessageIndefinately();
+        }
+
+        private void AzureIoTHub_OnMessageRecieved(object sender, string e)
+        {
+            HallLights.MessageRecieved(e);
         }
 
         private async void btnOn_Click(object sender, RoutedEventArgs e)
         {
             MakeUiEnabled(false);
-            await HallLights.TurnOnAsync("Tubelight");
+            await HallLights[0].TurnOnAsync();
             MakeUiEnabled(true);
         }
 
@@ -42,7 +50,7 @@ namespace HomeManager
         private async void btnOff_Click(object sender, RoutedEventArgs e)
         {
             MakeUiEnabled(false);
-            await HallLights.TurnOffAsync("Tubelight");
+            await HallLights[0].TurnOffAsync();
             MakeUiEnabled(true);
         }
 
@@ -59,7 +67,7 @@ namespace HomeManager
 
         private void sliderBrightness_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            HallLights.SetBrightness("Tubelight", (int)sliderBrightness.Value);
+            HallLights[0].Brightness = (int)sliderBrightness.Value;
         }
     }
 }
