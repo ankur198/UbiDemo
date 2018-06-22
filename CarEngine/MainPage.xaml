@@ -1,0 +1,30 @@
+﻿<Page
+    x:Class="CarEngine.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CarEngine"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <StackPanel 
+            Orientation="Horizontal"
+            RelativePanel.AlignHorizontalCenterWithPanel="True"
+            RelativePanel.AlignVerticalCenterWithPanel="True">
+
+            <Button Name="btnStartStop"
+                    Margin="5" Click="btnStartStop_Click">
+                Start/Stop Engine
+            </Button>
+
+            <TextBlock Name="txtEngineStatus"
+                       Margin="5" 
+                       VerticalAlignment="Center">
+                Engine is off
+            </TextBlock>
+
+        </StackPanel>
+        <TextBlock Name="txtMsgRecieved" />
+    </RelativePanel>
+</Page>
