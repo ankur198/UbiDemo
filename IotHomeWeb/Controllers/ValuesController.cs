@@ -12,6 +12,7 @@ namespace IotHomeWeb.Controllers
 {
     public class ValuesController : ApiController
     {
+        static int b = 100;
         static string response;
         // GET api/values
         public IEnumerable<string> Get()
@@ -24,11 +25,29 @@ namespace IotHomeWeb.Controllers
         {
             if (id == 1)
             {
-                response = "Tubelight,1,100";
+                response = "Tubelight,1,"+b;
             }
             else if (id == 0)
             {
-                response = "Tubelight,0,100";
+                response = "Tubelight,0,"+b;
+            }
+            else if (id==2)
+            {
+                if (b == 100)
+                {
+                    b = 40;
+                }
+                else b -= 20;
+                response = "Tubelight,1,"+b;
+            }
+            else if (id == 3)
+            {
+                if (b == 40)
+                {
+                    b = 100;
+                }
+                else b += 20;
+                response = "Tubelight,1," + b;
             }
             else return "error";
 
