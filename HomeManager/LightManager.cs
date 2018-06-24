@@ -45,49 +45,63 @@ namespace HomeManager
         public int Pin { get; set; }
         public int TransitionSpeed { get; set; }
 
+        public int Brightness
+        {
+            get { return _PrefferedBrightness; }
+            set
+            {
+                State = true;
+                _PrefferedBrightness = value;
+                SetBrightnessTo(_PrefferedBrightness);
+            }
+        }
+        private int _PrefferedBrightness;
+        private int _CurrentBrightness = 0;
+
         public Light(string nickname, int brightness, bool state, int pin, int transitionSpeed)
         {
             Nickname = nickname;
-            _Brightness = brightness;
+            _PrefferedBrightness = brightness;
             State = state;
             Pin = pin;
             TransitionSpeed = transitionSpeed;
         }
 
+        private async Task SetBrightnessTo(int value)
+        {
+            if (_CurrentBrightness > value)
+            {
+                for (int i = _CurrentBrightness; i >= value; i--)
+                {
+                    GpioManager.SetPwm(Pin, i);
+                    await Task.Delay(TransitionSpeed);
+                }
+            }
+            else if (_CurrentBrightness<value)
+            {
+                for (int i = _CurrentBrightness; i <= value; i++)
+                {
+                    GpioManager.SetPwm(Pin, i);
+                    await Task.Delay(TransitionSpeed);
+                }
+            }
+            _CurrentBrightness = value;
+        }
+
         public async Task TurnOnAsync()
         {
-            for (int i = 0; i <= _Brightness; i++)
-            {
-                GpioManager.SetPwm(Pin, i);
-                await Task.Delay(TransitionSpeed);
-            }
+            await SetBrightnessTo(_PrefferedBrightness);
             State = true;
             Debug.WriteLine("light on");
         }
         public async Task TurnOffAsync()
         {
-            Debug.WriteLine("turning light off");
-            for (int i = _Brightness; i > -1; i--)
-            {
-                GpioManager.SetPwm(Pin, i);
-                await Task.Delay(TransitionSpeed);
-                Debug.WriteLine(i.ToString());
-            }
+            await SetBrightnessTo(0);
             State = false;
             Debug.WriteLine("light off");
         }
-        private int _Brightness;
 
-        public int Brightness
-        {
-            get { return _Brightness; }
-            set
-            {
-                GpioManager.SetPwm(Pin, value);
-                State = true;
-                _Brightness = value;
-            }
-        }
+
     }
 
 }

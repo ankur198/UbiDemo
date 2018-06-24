@@ -55,7 +55,7 @@ namespace HomeManager
 
         private void sliderTransition_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            HallLights.TransitionSpeed = (int)sliderTransition.Value;
+            HallLights[0].TransitionSpeed = (int)sliderTransition.Value;
         }
 
         private void sliderBrightness_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
