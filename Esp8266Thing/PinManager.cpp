@@ -16,15 +16,41 @@ PinManager::PinManager()
 	}
 }
 
+void ChangePinSmoothly(int index, int value)
+{
+	int currentVal = vals[index];
+	if (currentVal > value)
+	{
+		for (int i = currentVal - 1; i >= value; i--)
+		{
+			analogWrite(pins[index], i);
+			delay(5);
+		}
+	}
+	else
+	{
+		for (int i = value; i < currentVal; i++)
+		{
+			analogWrite(pins[index], i);
+			delay(5);
+		}
+	}
+}
+
 void SetPinVal(int pin, int pinValue)
 {
 	Serial.println(String(pin) + ":" + String(pinValue));
+	if (pinValue > 1023 || pinValue < 0)
+	{
+		Serial.println("Invalid pinValue");
+		return;
+	}
 	for (int i = 0; i < 9; i++)
 	{
 		if (pins[i] == pin)
 		{
+			ChangePinSmoothly(i, pinValue);
 			vals[i] = pinValue;
-			analogWrite(pin, pinValue);
 			return;
 		}
 	}
