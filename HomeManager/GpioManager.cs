@@ -33,8 +33,8 @@ namespace HomeManager
             else
             {
                 Debug.WriteLine("Lightning not enabled");
-                IsInitialising = false;
             }
+            IsInitialising = false;
             return status;
         }
 
@@ -59,15 +59,18 @@ namespace HomeManager
 
         internal static async void SetPwm(int pin, int val)
         {
-            await CoreApplication.MainView.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            if (pwmController != null)
             {
-                var x = Pins[pin];
-                float pwm = val;
-                pwm = pwm / 100;
-                Debug.Write(pwm + " ");
-                x.SetActiveDutyCyclePercentage(pwm);
-                x.Start();
-            });
+                await CoreApplication.MainView.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    {
+                        var x = Pins[pin];
+                        float pwm = val;
+                        pwm = pwm / 100;
+                        Debug.Write(pwm + " ");
+                        x.SetActiveDutyCyclePercentage(pwm);
+                        x.Start();
+                    });
+            }
         }
     }
 }
