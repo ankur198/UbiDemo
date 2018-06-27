@@ -8,22 +8,6 @@
     mc:Ignorable="d">
 
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" BorderBrush="Black" BorderThickness=".5" Visibility="Collapsed">
-            <TextBlock Text="Tube light" HorizontalAlignment="Center" Margin="10"/>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                <Button Content="On" Name="btnOn" Click="btnOn_Click" Margin="5"/>
-                <Button Content="Off" Name="btnOff" Click="btnOff_Click" Margin="5"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right">
-                <TextBlock Text="Transition value" HorizontalAlignment="Center" Margin="10"/>
-                <Slider Name="sliderTransition" Maximum="100" Width="250" ValueChanged="sliderTransition_ValueChanged"></Slider>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right">
-                <TextBlock Text="Brightness" HorizontalAlignment="Center" Margin="10"/>
-                <Slider Name="sliderBrightness" Maximum="100" Width="250" ValueChanged="sliderBrightness_ValueChanged"></Slider>
-            </StackPanel>
-        </StackPanel>
-
         <ListView x:Name="ListAllHallLights" ItemsSource="{x:Bind HallLights.Lights}" SelectionMode="None">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="local:Light">
@@ -32,7 +16,7 @@
                             <TextBlock Text="{x:Bind Nickname}"/>
                             <TextBlock Text="{x:Bind Pin}" HorizontalAlignment="Right" RelativePanel.AlignRightWithPanel="True"/>
                         </RelativePanel>
-                        
+
                         <ToggleSwitch Toggled="toggleOnOff_Toggled"
                                       IsOn="{x:Bind Path=State,Mode=TwoWay}"/>
 

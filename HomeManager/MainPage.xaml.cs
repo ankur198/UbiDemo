@@ -34,37 +34,6 @@ namespace HomeManager
 
         }
 
-        private async void btnOn_Click(object sender, RoutedEventArgs e)
-        {
-            MakeUiEnabled(false);
-            await HallLights[0].TurnOnAsync();
-            MakeUiEnabled(true);
-        }
-
-
-        private async void btnOff_Click(object sender, RoutedEventArgs e)
-        {
-            MakeUiEnabled(false);
-            await HallLights[0].TurnOffAsync();
-            MakeUiEnabled(true);
-        }
-
-        private void MakeUiEnabled(bool val)
-        {
-            btnOn.IsEnabled = val;
-            btnOff.IsEnabled = val;
-        }
-
-        private void sliderTransition_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
-        {
-            HallLights[0].TransitionSpeed = (int)sliderTransition.Value;
-        }
-
-        private void sliderBrightness_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
-        {
-            HallLights[0].Brightness = (int)sliderBrightness.Value;
-        }
-
         private void btnAddLight_Click(object sender, RoutedEventArgs e)
         {
             HallLights.AddLight(txtNickname.Text, int.Parse(txtPin.Text));
