@@ -7,7 +7,7 @@ class PinManager
 {
 public:
 	PinManager();
-	String ProcessResponse(String request);
+	String ProcessRequest(String request);
 
 private:
 	

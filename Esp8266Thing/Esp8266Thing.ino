@@ -54,8 +54,8 @@ void GotClient(WiFiClient client)
 	//started recieving data
 	String req = client.readStringUntil('\r');
 	Serial.println(req);
-	client.flush();
-	req = pins.ProcessResponse(req);
+	client.flush();	
+	req = pins.ProcessRequest(req);
 	Serial.println(req);
 	String s = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" + req;
 	client.print(s);

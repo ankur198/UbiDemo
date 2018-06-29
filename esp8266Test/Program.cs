@@ -9,34 +9,54 @@ namespace esp8266Test
 {
     class Program
     {
+        static Uri ip = new Uri("http://192.168.1.100");
         static void Main(string[] args)
         {
-            set(5, 1023);
-            get(5);
-            set(15, 100);
-            get(15);
-            set(0, 200);
-            get(0);
-            set(2, 300);
-            get(2);
+            doSample();
             Console.ReadLine();
         }
 
-        async static void set(int pin, int value)
+        private static async void doSample()
+        {
+            await set(5, 1023);
+            await get(5);
+            await status();
+            await verify('2');
+        }
+
+        async static Task set(int pin, int value)
         {
             HttpClient client = new HttpClient();
 
-            client.BaseAddress = new System.Uri("http://192.168.1.104/");
-            var x = await client.GetStringAsync("/setpin/" + pin + "/" + value);
+            client.BaseAddress = ip;
+            var x = await client.GetStringAsync("/1/6027/setpin/" + pin + "/" + value);
             Console.WriteLine(x);
         }
-        async static void get(int pin)
+        async static Task get(int pin)
         {
             HttpClient client = new HttpClient();
 
-            client.BaseAddress = new System.Uri("http://192.168.1.104/");
-            var x = await client.GetStringAsync("/getpin/" + pin);
+            client.BaseAddress = ip;
+            var x = await client.GetStringAsync("/1/6027/getpin/" + pin);
             Console.WriteLine(x);
         }
+        async static Task status()
+        {
+            HttpClient client = new HttpClient();
+
+            client.BaseAddress = ip;
+            var x = await client.GetStringAsync("/1/6027/status/");
+            Console.WriteLine(x);
+        }
+
+        async static Task verify(char c)
+        {
+            HttpClient client = new HttpClient();
+
+            client.BaseAddress = ip;
+            var x = await client.GetStringAsync("/1/6027/verify/" + c);
+            Console.WriteLine(x);
+        }
+
     }
 }

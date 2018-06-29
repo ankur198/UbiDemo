@@ -59,8 +59,7 @@ void SetPinVal(int pin, int pinValue)
 
 String SetPin(String req)
 {
-	String raw = req.substring(req.indexOf('/') + 1);
-	raw = raw.substring(raw.indexOf('/') + 1);
+	String raw = req;
 	Serial.println(raw);
 	String pin = String(raw[0]);
 	if (raw[1] != '/')
@@ -96,8 +95,7 @@ int GetVal(int pin)
 
 String GetPin(String req)
 {
-	String raw = req.substring(req.indexOf('/') + 1);
-	raw = raw.substring(raw.indexOf('/') + 1);
+	String raw = req;
 	String pin = String(raw[0]);
 	if (raw[1] != '/')
 	{
@@ -127,34 +125,70 @@ String Status()
 	return r;
 }
 
-String Verify(String req)
+String VerifySelf(String req)
 {
-	int d = req.indexOf("y");
-	d = req[d + 1];
+	Serial.println(req);
+	int d = req[0];
 	d = d * 123;
 	return String(d);
 }
 
-String PinManager::ProcessResponse(String req)
+bool VerifySender(String req)
 {
-	if (req.indexOf("setpin") != -1)
+	Serial.println(req);
+	int key = req[0];
+	req = req.substring(2);
+	Serial.println(req);
+
+	String val = "";
+	for (int i = 0; i < req.indexOf("/"); i++)
 	{
-		Serial.println("Going to set pin");
-		return SetPin(req);
+		val += req[i];
 	}
-	else if (req.indexOf("getpin") != -1)
+	Serial.println(val);
+	if (key * 123 == val.toInt())
 	{
-		Serial.println("Going to get pin");
-		return GetPin(req);
+		Serial.println("Sender verified");
+		return true;
 	}
-	else if (req.indexOf("status") != -1)
+	Serial.println("Sender Not verified");
+	return false;
+}
+
+String PinManager::ProcessRequest(String req)
+{
+
+	req = req.substring(req.indexOf("/") + 1);
+	if (VerifySender(req))
 	{
-		Serial.println("status");
-		return Status();
+		req = req.substring(req.indexOf("/") + 1);
+		req = req.substring(req.indexOf("/") + 1);
+		Serial.println(req);
+
+		if (req.indexOf("setpin") != -1)
+		{
+			req = req.substring(req.indexOf("/") + 1);
+			Serial.println("Going to set pin");
+			return SetPin(req);
+		}
+		else if (req.indexOf("getpin") != -1)
+		{
+			req = req.substring(req.indexOf("/") + 1);
+			Serial.println("Going to get pin");
+			return GetPin(req);
+		}
+		else if (req.indexOf("status") != -1)
+		{
+			req = req.substring(req.indexOf("/") + 1);
+			Serial.println("status");
+			return Status();
+		}
+		else if (req.indexOf("verify") != -1)
+		{
+			req = req.substring(req.indexOf("/") + 1);
+			Serial.println("verify");
+			return VerifySelf(req);
+		}
 	}
-	else if (req.indexOf("verify") != -1)
-	{
-		Serial.println("verify");
-		return Verify(req);
-	}
+	return "Invalid request";
 }
