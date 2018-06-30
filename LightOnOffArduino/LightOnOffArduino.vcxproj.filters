@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="LightOnOffArduino.ino" />
+    <None Include="OnOffSimultaneous.ino" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.LightOnOffArduino.vsarduino.h">

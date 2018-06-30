@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -30,37 +31,12 @@ namespace HomeManager
             this.InitializeComponent();
 
             HallLights.AddLight("Tubelight", 13);
+
         }
 
-        private async void btnOn_Click(object sender, RoutedEventArgs e)
+        private void btnAddLight_Click(object sender, RoutedEventArgs e)
         {
-            MakeUiEnabled(false);
-            await HallLights[0].TurnOnAsync();
-            MakeUiEnabled(true);
-        }
-
-
-        private async void btnOff_Click(object sender, RoutedEventArgs e)
-        {
-            MakeUiEnabled(false);
-            await HallLights[0].TurnOffAsync();
-            MakeUiEnabled(true);
-        }
-
-        private void MakeUiEnabled(bool val)
-        {
-            btnOn.IsEnabled = val;
-            btnOff.IsEnabled = val;
-        }
-
-        private void sliderTransition_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
-        {
-            HallLights.TransitionSpeed = (int)sliderTransition.Value;
-        }
-
-        private void sliderBrightness_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
-        {
-            HallLights[0].Brightness = (int)sliderBrightness.Value;
+            HallLights.AddLight(txtNickname.Text, int.Parse(txtPin.Text));
         }
     }
 }

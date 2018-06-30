@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace HomeManager
 {
     public class LightManager
     {
-        public List<Light> Lights = new List<Light>();
+        public ObservableCollection<Light> Lights = new ObservableCollection<Light>();
 
         public bool AddLight(string Nickname, int pin)
         {
             Light light = new Light(Nickname, 100, false, pin, TransitionSpeed);
 
-            if (Lights.Find(x => x.Nickname == light.Nickname) != null)
+
+            if (Lights.ToList().Find(x => x.Nickname == light.Nickname || x.Pin == pin) != null)
             {
-                Debug.WriteLine("Duplicate name");
+                Debug.WriteLine("Duplicate name or pin");
                 return false;
             }
             else
@@ -36,58 +37,6 @@ namespace HomeManager
 
         public int TransitionSpeed = 50;
 
-    }
-
-    public class Light
-    {
-        public string Nickname { get; set; }
-        public bool State { get; set; }
-        public int Pin { get; set; }
-        public int TransitionSpeed { get; set; }
-
-        public Light(string nickname, int brightness, bool state, int pin, int transitionSpeed)
-        {
-            Nickname = nickname;
-            _Brightness = brightness;
-            State = state;
-            Pin = pin;
-            TransitionSpeed = transitionSpeed;
-        }
-
-        public async Task TurnOnAsync()
-        {
-            for (int i = 0; i <= _Brightness; i++)
-            {
-                GpioManager.SetPwm(Pin, i);
-                await Task.Delay(TransitionSpeed);
-            }
-            State = true;
-            Debug.WriteLine("light on");
-        }
-        public async Task TurnOffAsync()
-        {
-            Debug.WriteLine("turning light off");
-            for (int i = _Brightness; i > -1; i--)
-            {
-                GpioManager.SetPwm(Pin, i);
-                await Task.Delay(TransitionSpeed);
-                Debug.WriteLine(i.ToString());
-            }
-            State = false;
-            Debug.WriteLine("light off");
-        }
-        private int _Brightness;
-
-        public int Brightness
-        {
-            get { return _Brightness; }
-            set
-            {
-                GpioManager.SetPwm(Pin, value);
-                State = true;
-                _Brightness = value;
-            }
-        }
     }
 
 }
