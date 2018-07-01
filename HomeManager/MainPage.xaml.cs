@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -12,34 +13,45 @@ namespace HomeManager
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        LightManager HallLights = new LightManager();
+        LightManager HallLights = new LightManager("HallLights");
+        ObservableCollection<LightManager> Rooms = new ObservableCollection<LightManager>();
 
         public MainPage()
         {
             this.InitializeComponent();
-
+            Rooms.Add(HallLights);
             HallLights.AddLight("Tubelight", 13);
         }
 
         private void btnAddLight_Click(object sender, RoutedEventArgs e)
         {
-            if (txtIP.Text != "")
+            Debug.WriteLine(comboSelectedRoom.SelectedIndex);
+            if (comboSelectedRoom.SelectedIndex != -1)
             {
-                try
+                int index = comboSelectedRoom.SelectedIndex;
+                if (txtIP.Text != "")
                 {
-                    Uri uri = new Uri("http://" + txtIP.Text);
+                    try
+                    {
+                        Uri uri = new Uri("http://" + txtIP.Text);
 
-                    HallLights.AddLight(txtNickname.Text, int.Parse(txtPin.Text), uri);
-                }
-                catch (Exception)
-                {
-                    Debug.WriteLine("ip failed");
-                    //throw;
-                }
+                        Rooms[index].AddLight(txtNickname.Text, int.Parse(txtPin.Text), uri);
+                    }
+                    catch (Exception)
+                    {
+                        Debug.WriteLine("ip failed");
+                        //throw;
+                    }
 
+                }
+                else Rooms[index].AddLight(txtNickname.Text, int.Parse(txtPin.Text));
+                txtIP.Text = "";
             }
-            else HallLights.AddLight(txtNickname.Text, int.Parse(txtPin.Text));
-            txtIP.Text = "";
+        }
+
+        private void btnAddRoom_Click(object sender, RoutedEventArgs e)
+        {
+            Rooms.Add(new LightManager(txtRoomNickname.Text));
         }
     }
 }

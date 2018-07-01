@@ -8,36 +8,49 @@
     mc:Ignorable="d">
 
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <ListView x:Name="ListAllHallLights" ItemsSource="{x:Bind HallLights.Lights}" SelectionMode="None">
+        <ListView Name="listRoom" ItemsSource="{x:Bind Rooms}" SelectionMode="None">
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="local:ILight">
+                <DataTemplate x:DataType="local:LightManager">
                     <StackPanel>
-                        <RelativePanel>
-                            <TextBlock Text="{x:Bind Nickname}"/>
-                            <TextBlock Text="{x:Bind Pin}" HorizontalAlignment="Right" RelativePanel.AlignRightWithPanel="True"/>
-                        </RelativePanel>
+                        <TextBlock Text="{x:Bind Nickname}" FontWeight="Bold" FontSize="24" HorizontalAlignment="Center" Margin="10"/>
+                        <ListView x:Name="ListAllHallLights" ItemsSource="{x:Bind Lights}" SelectionMode="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="local:ILight">
+                                    <StackPanel>
+                                        <RelativePanel>
+                                            <TextBlock Text="{x:Bind Nickname}"/>
+                                            <TextBlock Text="{x:Bind Pin}" HorizontalAlignment="Right" RelativePanel.AlignRightWithPanel="True"/>
+                                        </RelativePanel>
 
-                        <ToggleSwitch
+                                        <ToggleSwitch
                                       IsOn="{x:Bind Path=State,Mode=TwoWay}"/>
 
-                        <Slider Maximum="100" Value="{x:Bind Brightness,Mode=TwoWay}"/>
+                                        <Slider Maximum="100" Value="{x:Bind Brightness,Mode=TwoWay}"/>
 
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
-        <StackPanel RelativePanel.AlignRightWithPanel="True" Margin="20">
+
+        <StackPanel RelativePanel.AlignRightWithPanel="True" Name="addRoom" Margin="20" Width="200">
+            <TextBlock Text="Add Room" HorizontalAlignment="Center" Margin="10" FontWeight="Bold"/>
+            <TextBox Name="txtRoomNickname" PlaceholderText="Nickname" Margin="5"/>
+            <Button Name="btnAddRoom" Content="Add" HorizontalAlignment="Center" Margin="10" Click="btnAddRoom_Click"/>
+
+        </StackPanel>
+
+        <StackPanel RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="addRoom" Margin="20">
             <TextBlock Text="Add Light" HorizontalAlignment="Center" Margin="10" FontWeight="Bold"/>
+            <ComboBox Name="comboSelectedRoom" ItemsSource="{x:Bind Rooms}">
+            </ComboBox>
             <TextBox Name="txtNickname" PlaceholderText="Nickname" Margin="5"/>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock Text="Pin" Margin="10"/>
-                <TextBox Name="txtPin" Width="70" InputScope="Digits" MaxLength="2"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="10">
-                <TextBlock Text="IP" Margin="10"/>
-                <TextBox Name="txtIP" Width="200" InputScope="Url"/>
-            </StackPanel>
+            <TextBox Name="txtPin" Width="70" InputScope="Digits" PlaceholderText="Pin" MaxLength="2"/>
+            <TextBox Name="txtIP" Width="200" InputScope="Url" PlaceholderText="IP" Margin="10"/>
             <Button Name="btnAddLight" Content="Add" HorizontalAlignment="Center" Margin="10" Click="btnAddLight_Click"/>
 
         </StackPanel>

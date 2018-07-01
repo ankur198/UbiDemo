@@ -27,6 +27,10 @@ namespace HomeManager
                 return true;
             }
         }
+        public LightManager(string nickname)
+        {
+            Nickname = nickname;
+        }
 
         public bool AddLight(string Nickname, int pin, Uri uri)
         {
@@ -44,6 +48,11 @@ namespace HomeManager
             }
         }
 
+        public override string ToString()
+        {
+            return Nickname;
+        }
+
         public ILight this[int index]
         {
             get { return Lights[0]; }
@@ -52,6 +61,7 @@ namespace HomeManager
 
         public int TransitionSpeed = 50;
 
+        public string Nickname { get; }
     }
 
 }
