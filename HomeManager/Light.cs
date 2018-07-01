@@ -1,10 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace HomeManager
 {
-    public class Light
+    public class Light : ILight
     {
         public string Nickname { get; set; }
         public int Pin { get; set; }
@@ -39,8 +40,11 @@ namespace HomeManager
                 SetBrightnessTo(_PrefferedBrightness);
             }
         }
-        private int _PrefferedBrightness;
-        private int _CurrentBrightness = 0;
+
+        private int _PrefferedBrightness { get; set; }
+        private int _CurrentBrightness { get; set; }
+        public Uri IP { get; set; }
+
         private bool _State;
 
         public Light(string nickname, int brightness, bool state, int pin, int transitionSpeed)
@@ -51,6 +55,7 @@ namespace HomeManager
             Pin = pin;
             TransitionSpeed = transitionSpeed;
             GpioManager.MakeOutput(Pin);
+            IP = new Uri("http://127.0.0.0/");
         }
 
         private async Task SetBrightnessTo(int value)
@@ -86,8 +91,6 @@ namespace HomeManager
             _State = false;
             Debug.WriteLine("light off");
         }
-
-
     }
 
 }

@@ -24,15 +24,15 @@ void ChangePinSmoothly(int index, int value)
 		for (int i = currentVal - 1; i >= value; i--)
 		{
 			analogWrite(pins[index], i);
-			delay(5);
+			delay(2);
 		}
 	}
 	else
 	{
-		for (int i = value; i < currentVal; i++)
+		for (int i = currentVal; i <= value; i++)
 		{
 			analogWrite(pins[index], i);
-			delay(5);
+			delay(2);
 		}
 	}
 }
