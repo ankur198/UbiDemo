@@ -24,7 +24,6 @@ namespace HomeManager
             else
             {
                 Lights.Add(light);
-                GpioManager.MakeOutput(light.Pin);
                 return true;
             }
         }

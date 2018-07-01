@@ -50,6 +50,7 @@ namespace HomeManager
             State = state;
             Pin = pin;
             TransitionSpeed = transitionSpeed;
+            GpioManager.MakeOutput(Pin);
         }
 
         private async Task SetBrightnessTo(int value)
