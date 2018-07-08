@@ -14,13 +14,15 @@ namespace HomeManager
     public sealed partial class MainPage : Page
     {
         LightManager HallLights = new LightManager("HallLights");
-        ObservableCollection<LightManager> Rooms = new ObservableCollection<LightManager>();
+        ObservableCollection<LightManager> Rooms = LightManager.Rooms;
 
         public MainPage()
         {
             this.InitializeComponent();
             Rooms.Add(HallLights);
             HallLights.AddLight("Tubelight", 13);
+            LocalServer.Start();
+
         }
 
         private void btnAddLight_Click(object sender, RoutedEventArgs e)
@@ -45,8 +47,8 @@ namespace HomeManager
 
                 }
                 else Rooms[index].AddLight(txtNickname.Text, int.Parse(txtPin.Text));
-                txtIP.Text = "";
             }
+            Debug.WriteLine(Message.PrepMessage());
         }
 
         private void btnAddRoom_Click(object sender, RoutedEventArgs e)

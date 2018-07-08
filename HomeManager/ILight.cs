@@ -1,9 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace HomeManager
 {
-    public interface ILight
+    public interface ILight : INotifyPropertyChanged
     {
         string Nickname { get; set; }
         int Pin { get; set; }

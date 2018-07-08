@@ -9,6 +9,8 @@ namespace HomeManager
 {
     public class LightManager
     {
+        public static ObservableCollection<LightManager> Rooms = new ObservableCollection<LightManager>();
+
         public ObservableCollection<ILight> Lights = new ObservableCollection<ILight>();
 
         public bool AddLight(string Nickname, int pin)

@@ -26,7 +26,7 @@ namespace HomeManager
                     TurnOffAsync();
                 }
                 else TurnOnAsync();
-
+                OnPropertyChanged(nameof(State));
             }
         }
 
@@ -35,9 +35,15 @@ namespace HomeManager
             get { return _PrefferedBrightness; }
             set
             {
+                if (_PrefferedBrightness == value)
+                {
+                    return;
+                }
                 _State = true;
                 _PrefferedBrightness = value;
                 SetBrightnessTo(_PrefferedBrightness);
+                OnPropertyChanged(nameof(State));
+                OnPropertyChanged(nameof(Brightness));
             }
         }
 
@@ -47,11 +53,21 @@ namespace HomeManager
 
         private bool _State;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string PropertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
+            }
+        }
+
         public Light(string nickname, int brightness, bool state, int pin, int transitionSpeed)
         {
             Nickname = nickname;
             _PrefferedBrightness = brightness;
-            State = state;
+            _State = state;
             Pin = pin;
             TransitionSpeed = transitionSpeed;
             GpioManager.MakeOutput(Pin);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
@@ -29,7 +30,10 @@ namespace HomeManager
             {
                 //_State = true;
                 _Brightness = value;
-                if (_State) TurnOnAsync();
+                _State = true;
+                TurnOnAsync();
+                OnPropertyChanged(nameof(Brightness));
+                OnPropertyChanged(nameof(State));
 
             }
         }
@@ -51,20 +55,33 @@ namespace HomeManager
                 {
                     if (value == true)
                     {
+                        _State = true;
                         TurnOnAsync();
                     }
                     else
                     {
+                        _State = false;
                         TurnOffAsync();
                     }
+                    OnPropertyChanged(nameof(State));
                 }
             }
         }
         private bool _State = false;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string PropertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
+            }
+        }
+
         public async Task TurnOffAsync()
         {
-            _State = false;
+            //_State = false;
 
             var msg = $"/1/6027/setpin/{Pin}/0";
             await SendMessageToDevice(msg);
@@ -73,7 +90,8 @@ namespace HomeManager
 
         public async Task TurnOnAsync()
         {
-            _State = true;
+            //_State = true;
+
             int b = _Brightness * 10;
             var msg = $"/1/6027/setpin/{Pin}/{b}";
             await SendMessageToDevice(msg);
