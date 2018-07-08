@@ -100,7 +100,8 @@
     <Compile Include="Light.cs" />
     <Compile Include="LightManager.cs" />
     <Compile Include="LightNetworked.cs" />
-    <Compile Include="LocalServer.cs" />
+    <Compile Include="LocalApiServer.cs" />
+    <Compile Include="LocalWebServer.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

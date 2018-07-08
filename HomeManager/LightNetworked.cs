@@ -28,12 +28,12 @@ namespace HomeManager
             }
             set
             {
-                //_State = true;
                 _Brightness = value;
-                _State = true;
-                TurnOnAsync();
+                if (_State==true)
+                {
+                    TurnOnAsync();
+                }
                 OnPropertyChanged(nameof(Brightness));
-                OnPropertyChanged(nameof(State));
 
             }
         }

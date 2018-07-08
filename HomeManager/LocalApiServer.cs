@@ -12,16 +12,13 @@ using Windows.Networking.Sockets;
 
 namespace HomeManager
 {
-    static class LocalServer
+    static class LocalApiServer
     {
-        static StreamSocketListener listener = new StreamSocketListener();
         static HttpListener httpListener = new HttpListener();
 
         public static async void Start()
         {
 
-            //await listener.BindServiceNameAsync("4545");
-            //listener.ConnectionReceived += Listener_ConnectionReceivedAsync;
 
             httpListener.Prefixes.Add("http://*:4545/");
             httpListener.Start();
@@ -33,10 +30,14 @@ namespace HomeManager
                 {
                     var context = await httpListener.GetContextAsync();
                     Debug.WriteLine(context.Request.Url);
-                    //var x = new StreamReader(context.Request.InputStream.AsInputStream().AsStreamForRead()).ReadLine();
 
                     var req = new StreamReader(context.Request.InputStream, context.Request.ContentEncoding).ReadToEnd();
                     Debug.WriteLine(req);
+
+                    if (req!="")
+                    {
+                        MakeChanges(req);
+                    }
 
                     context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
                     context.Response.Headers.Add("Access-Control-Allow-Methods", "POST, GET");
@@ -55,40 +56,19 @@ namespace HomeManager
             }
         }
 
-        private static async void Listener_ConnectionReceivedAsync(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
+        private static void MakeChanges(string Request)
         {
-            string request;
-            using (var x = args.Socket.InputStream.AsStreamForRead())
-            {
-                StreamReader reader = new StreamReader(x);
-                request = await reader.ReadToEndAsync();
-            }
-            string response = ProcessRequest(request);
+            var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<LightMessageObject>(Request);
 
-            using (var x = args.Socket.OutputStream.AsStreamForWrite())
-            {
-                StreamWriter writer = new StreamWriter(x);
-                await writer.WriteLineAsync(response);
-                await writer.FlushAsync();
-                writer.Dispose();
-            }
-            args.Socket.Dispose();
-        }
+            var Room = LightManager.Rooms.ToList().FirstOrDefault(room => room.Nickname == obj.Room);
 
-        private static string ProcessRequest(string request)
-        {
-            string response = "";
-            switch (request)
-            {
-                case "GetAll":
-                    response = Message.PrepMessage();
-                    break;
+            var Light = Room.Lights.ToList().Find(l => l.Nickname == obj.Nickname);
 
-                default:
-                    response = "Invalid request";
-                    break;
+            if (Light!=null)
+            {
+                Light.State = obj.State;
+                Light.Brightness = obj.Brightness;
             }
-            return response;
         }
     }
 }

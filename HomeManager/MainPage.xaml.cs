@@ -21,8 +21,8 @@ namespace HomeManager
             this.InitializeComponent();
             Rooms.Add(HallLights);
             HallLights.AddLight("Tubelight", 13);
-            LocalServer.Start();
-
+            LocalApiServer.Start();
+            LocalWebServer.Start();
         }
 
         private void btnAddLight_Click(object sender, RoutedEventArgs e)
